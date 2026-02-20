@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Users, Heart, Zap, Bell } from 'lucide-react';
 import api from '../services/api';
 import NepalMap from '../components/dashboard/NepalMap';
@@ -8,6 +9,7 @@ const Dashboard = () => {
     const [stats, setStats] = useState(null);
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -89,7 +91,7 @@ const Dashboard = () => {
                             <div className="relative z-10">
                                 <h3 className="text-xl font-bold mb-4">Finding Your Jodi</h3>
                                 <p className="opacity-80 text-sm mb-6">Based on your persona, we've found 3 potential co-founders for you.</p>
-                                <button className="bg-white dark:bg-sangam-emerald text-sangam-emerald dark:text-white w-full py-3 rounded-xl font-bold hover:bg-slate-50 transition-colors">Start Discovery</button>
+                                <button onClick={() => navigate('/matcher')} className="bg-white dark:bg-sangam-emerald text-sangam-emerald dark:text-white w-full py-3 rounded-xl font-bold hover:bg-slate-50 transition-colors">Start Discovery</button>
                             </div>
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
                         </div>
