@@ -1,0 +1,486 @@
+[
+  {
+    "model": "users.customuser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "anish_dev",
+      "first_name": "",
+      "last_name": "",
+      "email": "anish_dev@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "HACKER",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "IDEA",
+      "province": "BAGMATI",
+      "phone_number": "+977-9800000111",
+      "karma_score": 0,
+      "bio": "Full-stack dev interested in FinTech.",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "sita_design",
+      "first_name": "",
+      "last_name": "",
+      "email": "sita_design@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "HIPSTER",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "MVP",
+      "province": "KOSHI",
+      "phone_number": "+977-9800000222",
+      "karma_score": 0,
+      "bio": "Product designer with a focus on UI/UX.",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "raj_hustles",
+      "first_name": "",
+      "last_name": "",
+      "email": "raj_hustles@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "HUSTLER",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "REVENUE",
+      "province": "LUMBINI",
+      "phone_number": "+977-9800000333",
+      "karma_score": 0,
+      "bio": "Growth hacker and sales specialist.",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "pema_pioneer",
+      "first_name": "",
+      "last_name": "",
+      "email": "pema_pioneer@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "HACKER",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "MVP",
+      "province": "GANDAKI",
+      "phone_number": "+977-9800000444",
+      "karma_score": 0,
+      "bio": "AI researcher building local LLMs.",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "bimal_growth",
+      "first_name": "",
+      "last_name": "",
+      "email": "bimal_growth@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "HUSTLER",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "IDEA",
+      "province": "MADHESH",
+      "phone_number": "+977-9800000555",
+      "karma_score": 0,
+      "bio": "Experienced manager scaling startups.",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "lawyer_laxman",
+      "first_name": "",
+      "last_name": "",
+      "email": "lawyer_laxman@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "EXPERT",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "KOSHI",
+      "phone_number": "+977-9801000111",
+      "karma_score": 0,
+      "bio": null,
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "ca_binita",
+      "first_name": "",
+      "last_name": "",
+      "email": "ca_binita@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "EXPERT",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "BAGMATI",
+      "phone_number": "+977-9801000222",
+      "karma_score": 0,
+      "bio": null,
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "dev_dorje",
+      "first_name": "",
+      "last_name": "",
+      "email": "dev_dorje@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "EXPERT",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "GANDAKI",
+      "phone_number": "+977-9801000333",
+      "karma_score": 0,
+      "bio": null,
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "investor_raj",
+      "first_name": "",
+      "last_name": "",
+      "email": "investor_raj@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "INVESTOR",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "LUMBINI",
+      "phone_number": "+977-9810000111",
+      "karma_score": 0,
+      "bio": "Early-stage angel investor",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "maya_cap",
+      "first_name": "",
+      "last_name": "",
+      "email": "maya_cap@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "INVESTOR",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "BAGMATI",
+      "phone_number": "+977-9810000222",
+      "karma_score": 0,
+      "bio": "Venture partner focused on SaaS",
+      "is_verified": true
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "email": "admin@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "BAGMATI",
+      "phone_number": "+977-9800000000",
+      "karma_score": 0,
+      "bio": null,
+      "is_verified": false
+    }
+  },
+  {
+    "model": "users.customuser",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$600000$abcdef1234567890$PLACEHOLDER",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "peepal",
+      "first_name": "",
+      "last_name": "",
+      "email": "peepal@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2026-02-20T00:00:00Z",
+      "role": "FOUNDER",
+      "persona": "NONE",
+      "nagarik_id": null,
+      "linkedin_profile": null,
+      "startup_stage": "NONE",
+      "province": "BAGMATI",
+      "phone_number": "+977-9800012345",
+      "karma_score": 0,
+      "bio": null,
+      "is_verified": false
+    }
+  },
+  {
+    "model": "core.founderprofile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "company_name": "anish_dev_startup",
+      "founded_date": null,
+      "team_size": 3,
+      "traction": "Early traction for anish_dev",
+      "website": null
+    }
+  },
+  {
+    "model": "core.founderprofile",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "company_name": "sita_design_startup",
+      "founded_date": null,
+      "team_size": 5,
+      "traction": "Early traction for sita_design",
+      "website": null
+    }
+  },
+  {
+    "model": "core.founderprofile",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "company_name": "raj_hustles_startup",
+      "founded_date": null,
+      "team_size": 7,
+      "traction": "Early traction for raj_hustles",
+      "website": null
+    }
+  },
+  {
+    "model": "core.founderprofile",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "company_name": "pema_pioneer_startup",
+      "founded_date": null,
+      "team_size": 2,
+      "traction": "Early traction for pema_pioneer",
+      "website": null
+    }
+  },
+  {
+    "model": "core.founderprofile",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "company_name": "bimal_growth_startup",
+      "founded_date": null,
+      "team_size": 9,
+      "traction": "Early traction for bimal_growth",
+      "website": null
+    }
+  },
+  {
+    "model": "core.expertprofile",
+    "pk": 1,
+    "fields": {
+      "user": 6,
+      "specialization": "Legal",
+      "bio": "Specialized in Export Law & Tax.",
+      "hourly_rate": "45.00",
+      "rating": "5.00",
+      "is_vetted": true
+    }
+  },
+  {
+    "model": "core.expertprofile",
+    "pk": 2,
+    "fields": {
+      "user": 7,
+      "specialization": "Accountant",
+      "bio": "Chartered Accountant for Agri-Business.",
+      "hourly_rate": "60.00",
+      "rating": "5.00",
+      "is_vetted": true
+    }
+  },
+  {
+    "model": "core.expertprofile",
+    "pk": 3,
+    "fields": {
+      "user": 8,
+      "specialization": "Developer",
+      "bio": "Senior React architect.",
+      "hourly_rate": "85.00",
+      "rating": "5.00",
+      "is_vetted": true
+    }
+  },
+  {
+    "model": "core.investorprofile",
+    "pk": 1,
+    "fields": {
+      "user": 9,
+      "firm_name": "investor_raj_capital",
+      "investment_stage": "SEED",
+      "available_capital": "150000.00",
+      "focus_areas": "SaaS, Agri-Tech"
+    }
+  },
+  {
+    "model": "core.investorprofile",
+    "pk": 2,
+    "fields": {
+      "user": 10,
+      "firm_name": "maya_cap_capital",
+      "investment_stage": "SEED",
+      "available_capital": "175000.00",
+      "focus_areas": "SaaS, Agri-Tech"
+    }
+  },
+  {
+    "model": "core.points",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "points": 100,
+      "reason": "Onboarding bonus 1",
+      "created_at": "2026-02-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.points",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "points": 200,
+      "reason": "Onboarding bonus 2",
+      "created_at": "2026-02-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "core.points",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "points": 300,
+      "reason": "Onboarding bonus 3",
+      "created_at": "2026-02-20T00:00:00Z"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Points Managers",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "User Details",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "All Details",
+      "permissions": []
+    }
+  }
+]

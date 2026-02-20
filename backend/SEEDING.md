@@ -2,8 +2,14 @@
 
 This repository includes a management command to seed development data so collaborators can work with the same users and credentials.
 
+**TL;DR**: If you cloned and see an empty admin, run:
+```bash
+python manage.py loaddata fixture/demo_data.json
+```
+
 Location
 - Seeder: `backend/core/management/commands/seed_data.py`
+- Fixture: `backend/fixture/demo_data.json` (recommended for collaboration)
 
 How to run
 1. Activate your virtualenv in the `backend` folder:
@@ -48,3 +54,45 @@ Groups & Points
 	These are populated by the seeder for created founders and investors.
 
 If you'd prefer fixtures instead of running the seeder, I can add a JSON fixture (`loaddata`) as an alternative.
+
+## Multi-Device Collaboration Strategy
+
+**Problem**: The database file `db.sqlite3` is **not** checked into git, so when you clone on a new device, you get an empty database with no users or profiles.
+
+**Solution**: Use the JSON fixture for reproducible dev setup!
+
+### For the first person (or when setting up the repo):
+1. Run migrations and the seeder:
+   ```powershell
+   python manage.py migrate
+   python manage.py seed_data
+   ```
+
+2. Export the populated database as a fixture (one time):
+   ```powershell
+   python manage.py dumpdata --natural-foreign --natural-primary --indent 4 > fixture/demo_data.json
+   ```
+   Then commit this JSON file to git:
+   ```powershell
+   git add fixture/demo_data.json
+   git commit -m "Add demo data fixture for shared dev environment"
+   ```
+
+### For everyone else (cloning on any new device):
+   ```powershell
+   python manage.py migrate
+   python manage.py loaddata fixture/demo_data.json
+   ```
+
+Done! Now all devices have **the same demo users, profiles, syndicates, and points—without running the seeder.**
+
+### After adding new entities:
+If you add new demo data (new users, syndicates, expert profiles, etc.), export and commit an updated fixture:
+```powershell
+python manage.py dumpdata --natural-foreign --natural-primary --indent 4 > fixture/demo_data.json
+git add fixture/demo_data.json
+git commit -m "Update demo data fixture with new entities"
+git push
+```
+
+Then teammates pull and run `loaddata` to get the latest data on their machines.
