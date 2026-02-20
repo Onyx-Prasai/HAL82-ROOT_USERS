@@ -24,26 +24,26 @@ const SyndicateHub = () => {
     }, []);
 
     if (loading) return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-surface-base transition-colors duration-300">
             <div className="w-12 h-12 border-4 border-sangam-emerald border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400 font-medium">Scanning Investment Hub...</p>
+            <p className="text-surface-text-muted font-medium">Scanning Investment Hub...</p>
         </div>
     );
 
     if (error) return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-8">
-            <div className="bg-white p-8 rounded-3xl border border-red-100 text-center max-w-sm">
-                <p className="text-gray-500 mb-4">{error}</p>
+        <div className="min-h-screen flex items-center justify-center bg-surface-base p-8 transition-colors duration-300">
+            <div className="bg-surface-card p-8 rounded-3xl border border-surface-border text-center max-w-sm">
+                <p className="text-surface-text-muted mb-4">{error}</p>
                 <button onClick={() => window.location.reload()} className="text-sangam-emerald font-bold">Retry</button>
             </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-slate-50 p-8">
+        <div className="min-h-screen bg-surface-base p-8 transition-colors duration-300">
             <header className="max-w-6xl mx-auto mb-12">
-                <h1 className="text-4xl font-bold text-sangam-slate mb-2">Syndicate Hub</h1>
-                <p className="text-lg text-gray-500">Fractional investment and community-backed growth.</p>
+                <h1 className="text-4xl font-bold text-surface-text mb-2">Syndicate Hub [THEME-TEST]</h1>
+                <p className="text-lg text-surface-text-muted">Fractional investment and community-backed growth.</p>
             </header>
 
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -52,26 +52,26 @@ const SyndicateHub = () => {
                         key={s.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm hover:shadow-lg transition-all"
+                        className="surface-card rounded-3xl p-8 hover:shadow-lg transition-all"
                     >
                         <div className="flex justify-between items-start mb-6">
                             <div>
-                                <h3 className="text-2xl font-bold text-sangam-slate">{s.title}</h3>
-                                <p className="text-sm text-gray-400">Lead: {s.founder_name}</p>
+                                <h3 className="text-2xl font-bold text-surface-text">{s.title}</h3>
+                                <p className="text-sm text-surface-text-muted">Lead: {s.founder_name}</p>
                             </div>
                             <div className="p-3 bg-emerald-50 text-sangam-emerald rounded-2xl">
                                 <PieChart size={24} />
                             </div>
                         </div>
 
-                        <p className="text-gray-500 text-sm mb-8 line-clamp-3">{s.description}</p>
+                        <p className="text-surface-text-muted text-sm mb-8 line-clamp-3">{s.description}</p>
 
                         <div className="space-y-6">
                             <div className="flex justify-between text-sm mb-2">
-                                <span className="font-bold text-sangam-slate">${s.current_funding} committed</span>
-                                <span className="text-gray-400">of ${s.funding_goal} goal</span>
+                                <span className="font-bold text-surface-text">${s.current_funding} committed</span>
+                                <span className="text-surface-text-muted">of ${s.funding_goal} goal</span>
                             </div>
-                            <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden">
+                            <div className="w-full bg-surface-base h-3 rounded-full overflow-hidden border border-surface-border">
                                 <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${s.progress}%` }}
@@ -79,7 +79,7 @@ const SyndicateHub = () => {
                                 ></motion.div>
                             </div>
 
-                            <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                            <div className="flex items-center justify-between pt-6 border-t border-surface-border">
                                 <a
                                     href={`http://127.0.0.1:8000/api/core/statutes/${s.id}/`}
                                     target="_blank"
@@ -90,7 +90,7 @@ const SyndicateHub = () => {
                                     <span>View Smart-Statute</span>
                                     <ExternalLink size={14} />
                                 </a>
-                                <button className="bg-sangam-slate text-white px-6 py-2 rounded-xl font-bold text-sm hover:bg-slate-800 transition-colors">
+                                <button className="bg-sangam-emerald text-white px-6 py-2 rounded-xl font-bold text-sm hover:bg-sangam-emerald-dark transition-colors shadow-lg shadow-sangam-emerald/20">
                                     Commit Capital
                                 </button>
                             </div>
@@ -99,9 +99,9 @@ const SyndicateHub = () => {
                 ))}
 
                 {syndicates.length === 0 && (
-                    <div className="col-span-full py-20 bg-white rounded-3xl border border-dashed border-slate-200 text-center">
-                        <h3 className="text-xl font-bold text-gray-400">No active syndicates</h3>
-                        <p className="text-gray-500">New investment opportunities will appear here soon.</p>
+                    <div className="col-span-full py-20 bg-surface-card rounded-3xl border border-dashed border-surface-border text-center">
+                        <h3 className="text-xl font-bold text-surface-text-muted">No active syndicates</h3>
+                        <p className="text-surface-text-muted">New investment opportunities will appear here soon.</p>
                     </div>
                 )}
             </div>

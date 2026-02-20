@@ -3,11 +3,43 @@
 @theme {
   --color-sangam-slate: #1E293B;
   --color-sangam-emerald: #10B981;
+  --color-sangam-emerald-light: #34D399;
+  --color-sangam-emerald-dark: #059669;
+
   --font-sans: "Inter", "system-ui", "sans-serif";
+
+  /* Theme-aware backgrounds */
+  --color-surface-base: #F8FAFC;
+  /* slate-50 */
+  --color-surface-card: #FFFFFF;
+  --color-surface-border: #F1F5F9;
+  /* slate-100 */
+  --color-surface-text: #1E293B;
+  /* sangam-slate */
+  --color-surface-text-muted: #64748B;
+  /* slate-500 */
 }
 
 @layer base {
   body {
-    @apply bg-white text-sangam-slate antialiased;
+    @apply bg-surface-base text-surface-text antialiased transition-colors duration-300;
+  }
+
+  .dark {
+    --color-surface-base: #0F172A;
+    /* slate-900 */
+    --color-surface-card: #1E293B;
+    /* slate-800 */
+    --color-surface-border: #1E293B;
+    /* slate-800 */
+    --color-surface-text: #F8FAFC;
+    /* slate-50 */
+    --color-surface-text-muted: #94A3B8;
+    /* slate-400 */
+  }
+
+  /* Utility to make sections translucent and theme-aware */
+  .surface-card {
+    @apply bg-surface-card border border-surface-border shadow-sm transition-all;
   }
 }
