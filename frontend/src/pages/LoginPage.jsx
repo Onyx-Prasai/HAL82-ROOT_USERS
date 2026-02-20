@@ -6,6 +6,8 @@ import logo from '../assets/logo.png';
 
 const LoginPage = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -14,8 +16,17 @@ const LoginPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
+        setLoading(true);
+        
         try {
             if (isLogin) {
+                if (!formData.username || !formData.password) {
+                    setError('Please enter username and password');
+                    setLoading(false);
+                    return;
+                }
+                
                 const response = await api.post('/users/login/', {
                     username: formData.username,
                     password: formData.password
@@ -24,6 +35,12 @@ const LoginPage = () => {
                 localStorage.setItem('refresh_token', response.data.refresh);
                 window.location.href = '/dashboard';
             } else {
+                if (!formData.username || !formData.email || !formData.password) {
+                    setError('Please fill in all fields');
+                    setLoading(false);
+                    return;
+                }
+                
                 await api.post('/users/register/', formData);
                 const loginResponse = await api.post('/users/login/', {
                     username: formData.username,
@@ -35,7 +52,46 @@ const LoginPage = () => {
             }
         } catch (error) {
             console.error('Authentication error:', error);
-            alert('Authentication failed. Please check your credentials.');
+            
+            let errorMessage = 'Authentication failed. Please check your credentials.';
+            
+            if (error.response) {
+                // Server responded with error status
+                if (error.response.data) {
+                    // Check for specific error messages from backend
+                    if (typeof error.response.data === 'object') {
+                        // Check for common error field names
+                        if (error.response.data.detail) {
+                            errorMessage = error.response.data.detail;
+                        } else if (error.response.data.error) {
+                            errorMessage = error.response.data.error;
+                        } else if (error.response.data.message) {
+                            errorMessage = error.response.data.message;
+                        } else if (error.response.data.non_field_errors) {
+                            errorMessage = error.response.data.non_field_errors[0];
+                        } else if (error.response.data.username) {
+                            errorMessage = `Username: ${error.response.data.username}`;
+                        } else if (error.response.data.email) {
+                            errorMessage = `Email: ${error.response.data.email}`;
+                        } else if (error.response.data.password) {
+                            errorMessage = `Password: ${error.response.data.password}`;
+                        }
+                    }
+                }
+                
+                if (error.response.status === 401) {
+                    errorMessage = 'Invalid username or password';
+                } else if (error.response.status === 400) {
+                    errorMessage = errorMessage || 'Invalid input. Please check your information';
+                }
+            } else if (error.request) {
+                // Request made but no response
+                errorMessage = 'Unable to connect to server. Please check if the backend is running.';
+            }
+            
+            setError(errorMessage);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -103,6 +159,12 @@ const LoginPage = () => {
                         </p>
                     </div>
 
+                    {error && (
+                        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+                            <p className="text-sm font-medium text-red-600 dark:text-red-400">{error}</p>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="mt-8 space-y-6">
                         <div className="space-y-4">
                             <div>
@@ -144,10 +206,11 @@ const LoginPage = () => {
 
                         <button
                             type="submit"
-                            className="w-full bg-sangam-emerald text-surface-card py-4 rounded-xl font-black flex items-center justify-center space-x-2 hover:bg-sangam-emerald-light transition-colors shadow-lg shadow-sangam-emerald/20 uppercase tracking-widest"
+                            disabled={loading}
+                            className="w-full bg-sangam-emerald text-surface-card py-4 rounded-xl font-black flex items-center justify-center space-x-2 hover:bg-sangam-emerald-light transition-colors shadow-lg shadow-sangam-emerald/20 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
-                            <ArrowRight size={18} />
+                            <span>{loading ? (isLogin ? 'Signing In...' : 'Creating Account...') : (isLogin ? 'Sign In' : 'Create Account')}</span>
+                            {!loading && <ArrowRight size={18} />}
                         </button>
                     </form>
 

@@ -17,12 +17,12 @@ api.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem('refresh_token');
             if (refreshToken) {
                 try {
-                    const response = await axios.post('http://localhost:8000/api/users/token/refresh/', {
+                    const response = await axios.post('http://127.0.0.1:8000/api/users/token/refresh/', {
                         refresh: refreshToken
                     });
                     const { access } = response.data;
