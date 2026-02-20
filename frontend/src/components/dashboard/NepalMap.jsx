@@ -14,10 +14,10 @@ const NepalMap = ({ hotspots = [] }) => {
     ];
 
     return (
-        <div className="relative w-full h-[400px] bg-white rounded-3xl p-8 flex items-center justify-center overflow-hidden border border-slate-100">
+        <div className="relative w-full h-[400px] bg-surface-card rounded-3xl p-8 flex items-center justify-center overflow-hidden border border-surface-border shadow-sm transition-colors">
             <div className="absolute top-6 left-8">
-                <h3 className="text-xl font-bold text-sangam-slate">Ecosystem Activity</h3>
-                <p className="text-sm text-gray-500">Regional hotspots in Nepal</p>
+                <h3 className="text-xl font-bold text-surface-text">Ecosystem Activity</h3>
+                <p className="text-sm text-surface-text-muted">Regional hotspots in Nepal</p>
             </div>
 
             <svg viewBox="0 0 450 300" className="w-full h-full max-w-lg drop-shadow-2xl">
@@ -44,11 +44,11 @@ const NepalMap = ({ hotspots = [] }) => {
             <div className="absolute bottom-6 right-8 flex flex-col items-end space-y-2">
                 <div className="flex items-center space-x-2">
                     <div className="w-3 h-3 rounded-full bg-sangam-emerald"></div>
-                    <span className="text-xs text-gray-500">High Activity</span>
+                    <span className="text-xs text-surface-text-muted">High Activity</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-emerald-100"></div>
-                    <span className="text-xs text-gray-500">Low Activity</span>
+                    <div className="w-3 h-3 rounded-full bg-sangam-emerald/20"></div>
+                    <span className="text-xs text-surface-text-muted">Low Activity</span>
                 </div>
             </div>
         </div>

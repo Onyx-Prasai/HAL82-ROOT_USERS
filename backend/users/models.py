@@ -19,12 +19,24 @@ class CustomUser(AbstractUser):
         ('REVENUE', 'Revenue'),
         ('NONE', 'None'),
     )
+    PROVINCE_CHOICES = (
+        ('KOSHI', 'Koshi'),
+        ('MADHESH', 'Madhesh'),
+        ('BAGMATI', 'Bagmati'),
+        ('GANDAKI', 'Gandaki'),
+        ('LUMBINI', 'Lumbini'),
+        ('KARNALI', 'Karnali'),
+        ('SUDURPASHCHIM', 'Sudurpashchim'),
+        ('NONE', 'None'),
+    )
 
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='FOUNDER')
     persona = models.CharField(max_length=20, choices=PERSONA_CHOICES, default='NONE')
     nagarik_id = models.CharField(max_length=50, blank=True, null=True)
     linkedin_profile = models.URLField(blank=True, null=True)
     startup_stage = models.CharField(max_length=20, choices=STAGE_CHOICES, default='NONE')
+    province = models.CharField(max_length=20, choices=PROVINCE_CHOICES, default='NONE')
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     karma_score = models.IntegerField(default=0)
     bio = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)

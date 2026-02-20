@@ -49,27 +49,27 @@ const PulseLedger = () => {
     };
 
     if (loading) return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-surface-base">
             <div className="w-12 h-12 border-4 border-sangam-emerald border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p className="text-slate-400 font-medium tracking-widest uppercase animate-pulse">Reading the Pulse...</p>
+            <p className="text-surface-text-muted font-medium tracking-widest uppercase animate-pulse">Reading the Pulse...</p>
         </div>
     );
 
     if (error) return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-8">
-            <div className="bg-white p-8 rounded-3xl border border-red-100 text-center max-w-sm">
-                <p className="text-gray-500 mb-4">{error}</p>
+        <div className="min-h-screen flex items-center justify-center bg-surface-base p-8">
+            <div className="bg-surface-card p-8 rounded-3xl border border-surface-border text-center max-w-sm">
+                <p className="text-surface-text-muted mb-4">{error}</p>
                 <button onClick={() => window.location.reload()} className="text-sangam-emerald font-bold">Retry Connection</button>
             </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-slate-50 p-8">
+        <div className="min-h-screen bg-surface-base p-8 transition-colors duration-300">
             <header className="max-w-6xl mx-auto flex justify-between items-center mb-12">
                 <div>
-                    <h1 className="text-4xl font-bold text-sangam-slate mb-2">Growth Ledger</h1>
-                    <p className="text-lg text-gray-500">The Pulse of your Startup progress.</p>
+                    <h1 className="text-4xl font-bold text-surface-text mb-2">Growth Ledger</h1>
+                    <p className="text-lg text-surface-text-muted">The Pulse of your Startup progress.</p>
                 </div>
                 <button
                     onClick={() => setShowModal(true)}
@@ -88,10 +88,10 @@ const PulseLedger = () => {
                 </div>
 
                 {/* Data Table / Privacy Toggle */}
-                <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                <div className="bg-surface-card rounded-3xl p-8 border border-surface-border shadow-sm">
                     <div className="flex justify-between items-center mb-8">
-                        <h3 className="text-xl font-bold">Historical Snapshots</h3>
-                        <div className="flex items-center space-x-2 text-sm text-gray-500 bg-slate-50 px-4 py-2 rounded-xl">
+                        <h3 className="text-xl font-bold text-surface-text">Historical Snapshots</h3>
+                        <div className="flex items-center space-x-2 text-sm text-surface-text-muted bg-surface-base px-4 py-2 rounded-xl">
                             <Info size={16} />
                             <span>Visibility toggle allows verified investors to see your pulse.</span>
                         </div>
@@ -100,7 +100,7 @@ const PulseLedger = () => {
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
                             <thead>
-                                <tr className="text-gray-400 text-xs uppercase tracking-widest border-b border-slate-50">
+                                <tr className="text-surface-text-muted text-xs uppercase tracking-widest border-b border-surface-border">
                                     <th className="pb-4 font-black">Week Ending</th>
                                     <th className="pb-4 font-black">Revenue</th>
                                     <th className="pb-4 font-black">Users</th>
@@ -110,13 +110,13 @@ const PulseLedger = () => {
                             </thead>
                             <tbody className="divide-y divide-slate-50 text-sm">
                                 {snapshots.map((s) => (
-                                    <tr key={s.id} className="hover:bg-slate-50 transition-colors">
-                                        <td className="py-4 font-bold text-sangam-slate">{s.week_ending}</td>
+                                    <tr key={s.id} className="hover:bg-surface-base transition-colors divide-y divide-surface-border">
+                                        <td className="py-4 font-bold text-surface-text">{s.week_ending}</td>
                                         <td className="py-4 font-medium text-sangam-emerald">${s.revenue}</td>
-                                        <td className="py-4 font-medium">{s.users}</td>
-                                        <td className="py-4 text-gray-400 font-medium">${s.expenses}</td>
+                                        <td className="py-4 font-medium text-surface-text">{s.users}</td>
+                                        <td className="py-4 text-surface-text-muted font-medium">${s.expenses}</td>
                                         <td className="py-4">
-                                            <button className={`flex items-center space-x-1 px-3 py-1 rounded-full text-[10px] font-bold ${s.is_public ? 'bg-emerald-50 text-sangam-emerald' : 'bg-slate-100 text-slate-400'}`}>
+                                            <button className={`flex items-center space-x-1 px-3 py-1 rounded-full text-[10px] font-bold ${s.is_public ? 'bg-sangam-emerald/10 text-sangam-emerald' : 'bg-surface-base text-surface-text-muted'}`}>
                                                 {s.is_public ? <Globe size={12} /> : <Lock size={12} />}
                                                 <span>{s.is_public ? 'PUBLIC' : 'PRIVATE'}</span>
                                             </button>
@@ -144,10 +144,10 @@ const PulseLedger = () => {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full max-w-lg bg-white rounded-3xl p-8 shadow-2xl"
+                            className="relative w-full max-w-lg bg-surface-card rounded-3xl p-8 shadow-2xl border border-surface-border text-surface-text"
                         >
                             <h2 className="text-2xl font-bold mb-2">Sunday Pulse Update</h2>
-                            <p className="text-gray-500 mb-8 border-b border-slate-100 pb-4">Input your 3 key numbers for this week.</p>
+                            <p className="text-surface-text-muted mb-8 border-b border-surface-border pb-4">Input your 3 key numbers for this week.</p>
 
                             {!isSunday && (
                                 <div className="bg-amber-50 border border-amber-100 p-4 rounded-xl mb-6 flex items-start space-x-3">
@@ -159,32 +159,32 @@ const PulseLedger = () => {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Revenue ($)</label>
-                                        <input type="number" required className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none" value={formData.revenue} onChange={(e) => setFormData({ ...formData, revenue: e.target.value })} />
+                                        <label className="block text-xs font-black text-surface-text-muted uppercase tracking-widest mb-2">Revenue ($)</label>
+                                        <input type="number" required className="w-full bg-surface-base border border-surface-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none text-surface-text" value={formData.revenue} onChange={(e) => setFormData({ ...formData, revenue: e.target.value })} />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Total Users</label>
-                                        <input type="number" required className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none" value={formData.users} onChange={(e) => setFormData({ ...formData, users: e.target.value })} />
+                                        <label className="block text-xs font-black text-surface-text-muted uppercase tracking-widest mb-2">Total Users</label>
+                                        <input type="number" required className="w-full bg-surface-base border border-surface-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none text-surface-text" value={formData.users} onChange={(e) => setFormData({ ...formData, users: e.target.value })} />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Expenses ($)</label>
-                                    <input type="number" required className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none" value={formData.expenses} onChange={(e) => setFormData({ ...formData, expenses: e.target.value })} />
+                                    <label className="block text-xs font-black text-surface-text-muted uppercase tracking-widest mb-2">Expenses ($)</label>
+                                    <input type="number" required className="w-full bg-surface-base border border-surface-border rounded-xl px-4 py-3 focus:ring-2 focus:ring-sangam-emerald outline-none text-surface-text" value={formData.expenses} onChange={(e) => setFormData({ ...formData, expenses: e.target.value })} />
                                 </div>
 
-                                <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                <div className="flex items-center justify-between p-4 bg-surface-base rounded-2xl border border-surface-border">
                                     <div>
                                         <p className="text-sm font-bold">Public View</p>
-                                        <p className="text-[10px] text-gray-500">Allow verified investors to see this snapshot</p>
+                                        <p className="text-[10px] text-surface-text-muted">Allow verified investors to see this snapshot</p>
                                     </div>
-                                    <button type="button" onClick={() => setFormData({ ...formData, is_public: !formData.is_public })} className={`w-12 h-6 rounded-full transition-all relative ${formData.is_public ? 'bg-sangam-emerald' : 'bg-slate-300'}`}>
+                                    <button type="button" onClick={() => setFormData({ ...formData, is_public: !formData.is_public })} className={`w-12 h-6 rounded-full transition-all relative ${formData.is_public ? 'bg-sangam-emerald' : 'bg-surface-border'}`}>
                                         <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${formData.is_public ? 'left-7' : 'left-1'}`}></div>
                                     </button>
                                 </div>
 
                                 <div className="flex space-x-4 pt-4">
-                                    <button type="button" onClick={() => setShowModal(false)} className="flex-1 text-gray-500 font-bold">Cancel</button>
-                                    <button type="submit" className="flex-[2] bg-sangam-slate text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-colors">Submit Snapshot</button>
+                                    <button type="button" onClick={() => setShowModal(false)} className="flex-1 text-surface-text-muted font-bold">Cancel</button>
+                                    <button type="submit" className="flex-[2] bg-sangam-emerald text-white py-4 rounded-xl font-bold hover:bg-sangam-emerald-dark transition-colors shadow-lg shadow-sangam-emerald/20">Submit Snapshot</button>
                                 </div>
                             </form>
                         </motion.div>
@@ -196,10 +196,10 @@ const PulseLedger = () => {
 };
 
 const ChartCard = ({ title, data, dataKey, color }) => (
-    <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+    <div className="bg-surface-card p-8 rounded-3xl border border-surface-border shadow-sm">
         <div className="flex justify-between items-center mb-6">
-            <h3 className="text-xl font-bold text-sangam-slate">{title}</h3>
-            <div className="bg-emerald-50 text-sangam-emerald p-2 rounded-lg">
+            <h3 className="text-xl font-bold text-surface-text">{title}</h3>
+            <div className="bg-sangam-emerald/10 text-sangam-emerald p-2 rounded-lg">
                 <ArrowUpRight size={16} />
             </div>
         </div>
@@ -212,9 +212,9 @@ const ChartCard = ({ title, data, dataKey, color }) => (
                             <stop offset="95%" stopColor={color} stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
-                    <XAxis dataKey="week_ending" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} dy={10} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94A3B8' }} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-surface-border)" />
+                    <XAxis dataKey="week_ending" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--color-surface-text-muted)' }} dy={10} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'var(--color-surface-text-muted)' }} />
                     <Tooltip
                         contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                     />

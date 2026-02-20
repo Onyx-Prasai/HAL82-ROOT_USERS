@@ -52,8 +52,8 @@ const RolePicker = ({ onComplete }) => {
                         className="space-y-6"
                     >
                         <div className="text-center mb-8">
-                            <h2 className="text-3xl font-bold">Pick Your Role</h2>
-                            <p className="text-gray-500">How do you fit into the SANGAM ecosystem?</p>
+                            <h2 className="text-3xl font-bold text-surface-text">Pick Your Role</h2>
+                            <p className="text-surface-text-muted">How do you fit into the SANGAM ecosystem?</p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {roles.map((role) => (
@@ -61,21 +61,21 @@ const RolePicker = ({ onComplete }) => {
                                     key={role.id}
                                     onClick={() => setSelection({ ...selection, role: role.id })}
                                     className={`p-6 rounded-2xl border-2 text-left transition-all ${selection.role === role.id
-                                            ? 'border-sangam-emerald bg-emerald-50'
-                                            : 'border-gray-100 hover:border-gray-200'
+                                        ? 'border-sangam-emerald bg-sangam-emerald/10 text-sangam-emerald'
+                                        : 'border-surface-border bg-surface-card text-surface-text hover:border-surface-text-muted/30'
                                         }`}
                                 >
-                                    <div className={`mb-4 ${selection.role === role.id ? 'text-sangam-emerald' : 'text-gray-400'}`}>
+                                    <div className={`mb-4 ${selection.role === role.id ? 'text-sangam-emerald' : 'text-surface-text-muted'}`}>
                                         {role.icon}
                                     </div>
                                     <h3 className="font-bold text-lg">{role.title}</h3>
-                                    <p className="text-sm text-gray-500">{role.desc}</p>
+                                    <p className="text-sm text-surface-text-muted">{role.desc}</p>
                                 </button>
                             ))}
                         </div>
                         <button
                             onClick={handleNext}
-                            className="w-full mt-8 bg-sangam-slate text-white py-4 rounded-xl font-semibold flex items-center justify-center space-x-2"
+                            className="w-full mt-8 bg-sangam-emerald text-white py-4 rounded-xl font-semibold flex items-center justify-center space-x-2 hover:bg-sangam-emerald-dark transition-colors"
                         >
                             <span>Continue</span>
                             <ArrowRight size={18} />
@@ -92,8 +92,8 @@ const RolePicker = ({ onComplete }) => {
                         className="space-y-6"
                     >
                         <div className="text-center mb-8">
-                            <h2 className="text-3xl font-bold">What's Your Persona?</h2>
-                            <p className="text-gray-500">Every founder has a superpower.</p>
+                            <h2 className="text-3xl font-bold text-surface-text">What's Your Persona?</h2>
+                            <p className="text-surface-text-muted">Every founder has a superpower.</p>
                         </div>
                         <div className="grid grid-cols-1 gap-4">
                             {personas.map((persona) => (
@@ -101,21 +101,21 @@ const RolePicker = ({ onComplete }) => {
                                     key={persona.id}
                                     onClick={() => setSelection({ ...selection, persona: persona.id })}
                                     className={`p-6 rounded-2xl border-2 text-left flex items-center justify-between transition-all ${selection.persona === persona.id
-                                            ? 'border-sangam-emerald bg-emerald-50'
-                                            : 'border-gray-100 hover:border-gray-200'
+                                        ? 'border-sangam-emerald bg-sangam-emerald/10 text-sangam-emerald'
+                                        : 'border-surface-border bg-surface-card text-surface-text hover:border-surface-text-muted/30'
                                         }`}
                                 >
                                     <div>
                                         <h3 className="font-bold text-lg">{persona.title}</h3>
-                                        <p className="text-sm text-gray-500">{persona.desc}</p>
+                                        <p className="text-sm text-surface-text-muted">{persona.desc}</p>
                                     </div>
                                     {selection.persona === persona.id && <CheckCircle className="text-sangam-emerald" />}
                                 </button>
                             ))}
                         </div>
                         <div className="flex space-x-4 mt-8">
-                            <button onClick={handleBack} className="flex-1 border border-gray-200 py-4 rounded-xl font-semibold text-gray-600">Back</button>
-                            <button onClick={handleNext} className="flex-[2] bg-sangam-slate text-white py-4 rounded-xl font-semibold">Continue</button>
+                            <button onClick={handleBack} className="flex-1 border border-slate-200 dark:border-slate-700 py-4 rounded-xl font-semibold text-gray-600 dark:text-gray-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Back</button>
+                            <button onClick={handleNext} className="flex-[2] bg-sangam-slate dark:bg-sangam-emerald text-white py-4 rounded-xl font-semibold hover:opacity-90 transition-opacity">Continue</button>
                         </div>
                     </motion.div>
                 )}
@@ -129,15 +129,15 @@ const RolePicker = ({ onComplete }) => {
                         className="space-y-6"
                     >
                         <div className="text-center mb-8">
-                            <h2 className="text-3xl font-bold">Final Details</h2>
-                            <p className="text-gray-500">Help us verify and personalize your experience.</p>
+                            <h2 className="text-3xl font-bold text-surface-text">Final Details</h2>
+                            <p className="text-surface-text-muted">Help us verify and personalize your experience.</p>
                         </div>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nagarik App ID or LinkedIn</label>
+                                <label className="block text-sm font-medium text-surface-text-muted mb-1">Nagarik App ID or LinkedIn</label>
                                 <input
                                     type="text"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-sangam-emerald"
+                                    className="w-full px-4 py-3 rounded-xl bg-surface-card border border-surface-border text-surface-text outline-none focus:ring-2 focus:ring-sangam-emerald"
                                     value={selection.nagarik_id}
                                     onChange={(e) => setSelection({ ...selection, nagarik_id: e.target.value })}
                                     placeholder="ID or Profile Link"
@@ -145,13 +145,13 @@ const RolePicker = ({ onComplete }) => {
                             </div>
                             {selection.role === 'FOUNDER' && (
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">Startup Stage</label>
+                                    <label className="block text-sm font-medium text-surface-text-muted mb-1">Startup Stage</label>
                                     <div className="grid grid-cols-3 gap-2">
                                         {stages.map((stage) => (
                                             <button
                                                 key={stage}
                                                 onClick={() => setSelection({ ...selection, startup_stage: stage })}
-                                                className={`py-2 rounded-lg border ${selection.startup_stage === stage ? 'bg-sangam-slate text-white' : 'bg-white text-gray-600'
+                                                className={`py-2 rounded-lg border ${selection.startup_stage === stage ? 'bg-sangam-emerald text-white border-sangam-emerald' : 'bg-surface-card text-surface-text border-surface-border'
                                                     }`}
                                             >
                                                 {stage}
@@ -162,8 +162,8 @@ const RolePicker = ({ onComplete }) => {
                             )}
                         </div>
                         <div className="flex space-x-4 mt-8">
-                            <button onClick={handleBack} className="flex-1 border border-gray-200 py-4 rounded-xl font-semibold text-gray-600">Back</button>
-                            <button onClick={handleSubmit} className="flex-[2] bg-sangam-emerald text-white py-4 rounded-xl font-semibold">Complete Onboarding</button>
+                            <button onClick={handleBack} className="flex-1 border border-surface-border py-4 rounded-xl font-semibold text-surface-text-muted hover:bg-surface-base transition-colors">Back</button>
+                            <button onClick={handleSubmit} className="flex-[2] bg-sangam-emerald text-white py-4 rounded-xl font-semibold hover:bg-sangam-emerald-dark transition-colors">Complete Onboarding</button>
                         </div>
                     </motion.div>
                 )}
