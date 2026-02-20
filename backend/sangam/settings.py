@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['*']  # For development only
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',  # Must be first for ASGI; install: pip install daphne channels channels-redis
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,13 +78,11 @@ TEMPLATES = [
 # Channels
 ASGI_APPLICATION = 'sangam.asgi.application'
 
-# Redis for Channels layer (production: set real host)
+# Channels layer: InMemory for dev (no Redis); use Redis in production
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            'hosts': [('127.0.0.1', 6379)],
-        },
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        # For Redis: 'BACKEND': 'channels_redis.core.RedisChannelLayer', 'CONFIG': {'hosts': [('127.0.0.1', 6379)]},
     },
 }
 

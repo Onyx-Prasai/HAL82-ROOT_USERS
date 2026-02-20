@@ -66,10 +66,21 @@ In the spirit of a "Sangam" (The Confluence), this platform merges scattered inn
    python manage.py makemigrations
    python manage.py migrate
    ```
-6. **Start the server**:
+6. **Seed sample data** (Jodi, Syndicate, Experts):
    ```bash
-   python manage.py runserver
+   python manage.py seed_data
    ```
+   Creates ~40 founders, ~35 experts, and ~35 syndicates for testing.
+
+7. **For chat (WebSocket) support**, install additional packages:
+   ```bash
+   pip install daphne channels
+   ```
+   Then start the server with:
+   ```bash
+   daphne -b 127.0.0.1 -p 8000 sangam.asgi:application
+   ```
+   Or use `python manage.py runserver` for HTTP-only (chat history via REST still works).
 
 ### Frontend (React)
 1. **Navigate to frontend**:

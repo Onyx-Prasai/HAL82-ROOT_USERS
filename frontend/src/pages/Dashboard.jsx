@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { TrendingUp, Users, Heart, Zap, Bell } from 'lucide-react';
+import { TrendingUp, Users, Heart, Zap, Bell, Calendar } from 'lucide-react';
 import api from '../services/api';
 import NepalMap from '../components/dashboard/NepalMap';
 
 const Dashboard = () => {
     const [stats, setStats] = useState(null);
     const [user, setUser] = useState(null);
+    const [bookings, setBookings] = useState([]);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [statsRes, userRes] = await Promise.all([
+                const [statsRes, userRes, bookingsRes] = await Promise.all([
                     api.get('/core/stats/'),
-                    api.get('/users/profile/')
+                    api.get('/users/profile/'),
+                    api.get('/core/bookings/').catch(() => ({ data: [] }))
                 ]);
                 setStats(statsRes.data);
                 setUser(userRes.data);
+                setBookings(bookingsRes.data || []);
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
                 setError(err.message || 'Failed to load ecosystem data');
@@ -98,7 +101,23 @@ const Dashboard = () => {
 
                         <div className="bg-surface-card rounded-3xl p-8 border border-surface-border shadow-sm transition-colors">
                             <h3 className="text-lg font-bold mb-4 text-surface-text">Upcoming consultations</h3>
-                            <p className="text-sm text-surface-text-muted">No sessions booked. Visit the Marketplace to connect with experts.</p>
+                            {bookings.length === 0 ? (
+                                <p className="text-sm text-surface-text-muted">No sessions booked. Visit the Marketplace to connect with experts.</p>
+                            ) : (
+                                <div className="space-y-3">
+                                    {bookings.slice(0, 5).map((b) => (
+                                        <div key={b.id} className="flex items-center justify-between p-3 rounded-xl bg-surface-base border border-surface-border">
+                                            <span className="font-bold text-surface-text">{user?.id === b.expert ? b.client_username : b.expert_username}</span>
+                                            <span className={`text-xs px-2 py-1 rounded-full ${b.is_free_intro ? 'bg-sangam-emerald/10 text-sangam-emerald' : 'bg-surface-border text-surface-text-muted'}`}>
+                                                {b.is_free_intro ? 'Free intro' : `$${b.amount}`}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            <button onClick={() => navigate('/marketplace')} className="mt-4 text-sangam-emerald font-bold text-sm hover:underline flex items-center gap-2">
+                                <Calendar size={16} /> Visit Marketplace
+                            </button>
                         </div>
                     </aside>
                 </div>

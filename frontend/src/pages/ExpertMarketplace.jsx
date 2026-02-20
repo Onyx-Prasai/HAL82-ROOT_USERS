@@ -3,44 +3,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, ShieldCheck, Calendar, Filter, Search, X } from 'lucide-react';
 import api from '../services/api';
 import TagSelector from '../components/common/TagSelector';
+import BookSessionModal from '../components/marketplace/BookSessionModal';
 
 const ExpertMarketplace = () => {
     const [experts, setExperts] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [filtering, setFiltering] = useState(false);
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
     const [selectedTags, setSelectedTags] = useState([]);
     const [availableTags, setAvailableTags] = useState([]);
     const [showFilters, setShowFilters] = useState(false);
+    const [bookExpert, setBookExpert] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Fetch experts with filtering
-                let url = '/core/experts/';
-                const params = new URLSearchParams();
-                
-                if (selectedTags.length > 0) {
-                    params.append('tags', selectedTags.join(','));
-                }
-                if (search) {
-                    params.append('search', search);
-                }
-                
-                if (params.toString()) {
-                    url += '?' + params.toString();
-                }
-
-                const response = await api.get(url);
-                setExperts(response.data);
-            } catch (err) {
-                console.error('Error fetching experts:', err);
-                setError('Failed to load expert profiles.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         const fetchTags = async () => {
             try {
                 const response = await api.get('/users/interest-tags/');
@@ -50,14 +26,33 @@ const ExpertMarketplace = () => {
                 setAvailableTags(['Agriculture', 'Tech', 'FinTech', 'Health', 'Education', 'Manufacturing', 'AI', 'Sustainability', 'General']);
             }
         };
+        fetchTags();
+    }, []);
 
-        fetchData();
-        if (availableTags.length === 0) {
-            fetchTags();
-        }
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!initialLoading) setFiltering(true);
+            try {
+                let url = '/core/experts/';
+                const params = new URLSearchParams();
+                if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
+                if (search) params.append('search', search);
+                if (params.toString()) url += '?' + params.toString();
+                const response = await api.get(url);
+                setExperts(response.data);
+            } catch (err) {
+                console.error('Error fetching experts:', err);
+                setError('Failed to load expert profiles.');
+            } finally {
+                setInitialLoading(false);
+                setFiltering(false);
+            }
+        };
+        const debounce = setTimeout(fetchData, 300);
+        return () => clearTimeout(debounce);
     }, [selectedTags, search]);
 
-    if (loading) return (
+    if (initialLoading) return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-surface-base transition-colors duration-300">
             <div className="w-12 h-12 border-4 border-sangam-emerald border-t-transparent rounded-full animate-spin mb-4"></div>
             <p className="text-surface-text-muted font-medium tracking-widest">CONNECTING TO THE GUILD...</p>
@@ -159,7 +154,18 @@ const ExpertMarketplace = () => {
                 )}
             </header>
 
-            <div className="max-w-6xl mx-auto space-y-6">
+            <div className="max-w-6xl mx-auto">
+                {filtering && (
+                    <div className="flex justify-center mb-6">
+                        <div className="flex items-center gap-2 text-surface-text-muted text-sm">
+                            <div className="w-4 h-4 border-2 border-sangam-emerald border-t-transparent rounded-full animate-spin"></div>
+                            Updating results...
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            <div className={`max-w-6xl mx-auto space-y-6 ${filtering ? 'opacity-50 pointer-events-none' : ''}`}>
                 {experts.map((e) => (
                     <motion.div
                         key={e.id}
@@ -210,7 +216,10 @@ const ExpertMarketplace = () => {
                                 <p className="text-xs text-surface-text-muted font-bold uppercase">Rate</p>
                                 <p className="text-xl font-bold text-surface-text">${e.hourly_rate}<span className="text-xs text-surface-text-muted">/hr</span></p>
                             </div>
-                            <button className="bg-sangam-emerald text-white px-6 md:px-8 py-3 rounded-xl font-bold hover:bg-sangam-emerald-dark transition-colors flex items-center space-x-2 shadow-lg shadow-sangam-emerald/20 flex-shrink-0">
+                            <button
+                                onClick={() => setBookExpert(e)}
+                                className="bg-sangam-emerald text-white px-6 md:px-8 py-3 rounded-xl font-bold hover:bg-sangam-emerald-dark transition-colors flex items-center space-x-2 shadow-lg shadow-sangam-emerald/20 flex-shrink-0"
+                            >
                                 <Calendar size={18} />
                                 <span className="hidden md:inline">Book Session</span>
                             </button>
@@ -229,6 +238,10 @@ const ExpertMarketplace = () => {
                     </div>
                 )}
             </div>
+
+            {bookExpert && (
+                <BookSessionModal expert={bookExpert} onClose={() => setBookExpert(null)} />
+            )}
         </div>
     );
 };

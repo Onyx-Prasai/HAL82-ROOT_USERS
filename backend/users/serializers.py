@@ -62,3 +62,9 @@ class UserSerializer(serializers.ModelSerializer):
             interest_tags=validated_data.get('interest_tags', []),
         )
         return user
+
+class UserDiscoverySerializer(serializers.ModelSerializer):
+    """Read-only serializer for Jodi discovery (no password)."""
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'persona', 'role', 'startup_stage', 'province', 'bio', 'interest_tags', 'linkedin_profile', 'karma_score')

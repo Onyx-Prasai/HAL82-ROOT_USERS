@@ -37,6 +37,7 @@ class Syndicate(models.Model):
     funding_goal = models.DecimalField(max_digits=12, decimal_places=2)
     current_funding = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     is_active = models.BooleanField(default=True)
+    interest_tags = models.JSONField(default=list, blank=True)  # e.g. ['Tech', 'FinTech']
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -91,6 +92,63 @@ class InvestorProfile(models.Model):
         return f"{self.user.username} - Investor @ {self.firm_name or 'Independent'}"
 
 
+class TrialProposal(models.Model):
+    """Digital trial (2-week cooperation) proposal between users (e.g. Jodi)."""
+    STATUS_CHOICES = (('PENDING', 'Pending'), ('ACCEPTED', 'Accepted'), ('DECLINED', 'Declined'))
+    proposer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_trial_proposals')
+    recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_trial_proposals')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    message = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.proposer.username} → {self.recipient.username} ({self.status})"
+
+
+class Notification(models.Model):
+    """In-app notifications for messages, trial proposals, and bookings."""
+    NOTIFICATION_TYPE_CHOICES = (
+        ('MESSAGE', 'Message'),
+        ('TRIAL_PROPOSAL', 'Trial Proposal'),
+        ('BOOKING', 'Booking'),
+    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPE_CHOICES)
+    title = models.CharField(max_length=255)
+    message = models.TextField(blank=True, null=True)
+    read = models.BooleanField(default=False)
+    # Optional payload for linking to relevant objects (e.g. chat partner id, trial id)
+    payload = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.title} ({self.notification_type})"
+
+
+class Booking(models.Model):
+    """Session booking with expert. First session is free (intro) with contact details; paid sessions follow."""
+    STATUS_CHOICES = (('REQUESTED', 'Requested'), ('CONFIRMED', 'Confirmed'), ('COMPLETED', 'Completed'), ('CANCELLED', 'Cancelled'))
+    expert = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookings_as_expert')
+    client = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='bookings_as_client')
+    is_free_intro = models.BooleanField(default=True)  # First session: free intro with contact details
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='REQUESTED')
+    notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.client.username} → {self.expert.username} ({self.status})"
+
+
 class Points(models.Model):
     """A simple points system that can be attached to users.
 
@@ -107,3 +165,34 @@ class Points(models.Model):
 
     def __str__(self):
         return f"{self.user.username}: {self.points} ({self.reason})"
+
+
+class RedeemOffer(models.Model):
+    """Discount offers from startups that users can redeem with karma points."""
+    company_name = models.CharField(max_length=200)
+    description = models.TextField()
+    discount_percent = models.IntegerField(default=10)  # e.g. 10% off
+    points_required = models.IntegerField(default=50)
+    is_active = models.BooleanField(default=True)
+    interest_tags = models.JSONField(default=list, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.company_name}: {self.discount_percent}% off ({self.points_required} pts)"
+
+
+class Redemption(models.Model):
+    """Record of a user redeeming karma points for an offer."""
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='redemptions')
+    offer = models.ForeignKey(RedeemOffer, on_delete=models.CASCADE, related_name='redemptions')
+    points_spent = models.IntegerField()
+    redeemed_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-redeemed_at']
+
+    def __str__(self):
+        return f"{self.user.username} redeemed {self.offer.company_name}"
