@@ -1,3 +1,28 @@
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Message
+
+# Chat history API view
+class ChatHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, receiver_id):
+        user = request.user
+        messages = Message.objects.filter(
+            (models.Q(sender=user, receiver_id=receiver_id) |
+             models.Q(sender_id=receiver_id, receiver=user))
+        ).order_by('timestamp')
+        data = [
+            {
+                'sender': msg.sender.id,
+                'receiver': msg.receiver.id,
+                'content': msg.content,
+                'timestamp': msg.timestamp.isoformat(),
+            }
+            for msg in messages
+        ]
+        return Response(data)
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
