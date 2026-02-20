@@ -3,8 +3,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .serializers import UserSerializer
+from .models import INTEREST_TAGS
 
 User = get_user_model()
+
+class InterestTagsView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        return Response({'tags': INTEREST_TAGS})
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()

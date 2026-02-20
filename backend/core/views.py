@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, viewsets
+from rest_framework import generics, permissions, viewsets, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
@@ -8,6 +8,7 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from rest_framework.views import APIView
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -48,9 +49,50 @@ class SyndicateViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
 class ExpertProfileViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = ExpertProfile.objects.all()
     serializer_class = ExpertProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        queryset = ExpertProfile.objects.all()
+        
+        # Filter by interest tags if provided
+        tags = self.request.query_params.get('tags', None)
+        if tags:
+            tag_list = [tag.strip() for tag in tags.split(',')]
+            # Filter profiles where the user has at least one matching tag
+            queryset = queryset.filter(user__interest_tags__overlap=tag_list) if hasattr(queryset.query, 'overlap') else queryset
+            # For SQLite compatibility, we'll do a more flexible approach
+            filtered_profiles = []
+            for profile in queryset:
+                if any(tag in profile.user.interest_tags for tag in tag_list):
+                    filtered_profiles.append(profile.id)
+            queryset = queryset.filter(id__in=filtered_profiles)
+        
+        # Search by keyword (name, specialization, bio, tags)
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                Q(user__username__icontains=search) |
+                Q(specialization__icontains=search) |
+                Q(bio__icontains=search)
+            )
+            # Additional filtering for tags matching search
+            search_lower = search.lower()
+            filtered_profiles = []
+            for profile in queryset:
+                if any(search_lower in tag.lower() for tag in profile.user.interest_tags):
+                    if profile.id not in filtered_profiles:
+                        filtered_profiles.append(profile.id)
+            if filtered_profiles:
+                # Combine with existing queryset
+                queryset = queryset.filter(
+                    Q(user__username__icontains=search) |
+                    Q(specialization__icontains=search) |
+                    Q(bio__icontains=search) |
+                    Q(id__in=filtered_profiles)
+                )
+        
+        return queryset
 
 class SmartStatuteView(APIView):
     permission_classes = (permissions.IsAuthenticated,)

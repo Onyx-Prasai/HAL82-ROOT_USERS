@@ -1,14 +1,15 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from .models import INTEREST_TAGS
 
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'persona', 'nagarik_id', 'linkedin_profile', 'startup_stage', 'karma_score', 'province', 'phone_number')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'persona', 'nagarik_id', 'linkedin_profile', 'startup_stage', 'karma_score', 'province', 'phone_number', 'bio', 'is_verified', 'interest_tags')
 
     def create(self, validated_data):
         user = User.objects.create_user(

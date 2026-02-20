@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from .views import UserRegistrationView, UserProfileView, JodiMatcherView, ChangePasswordView
+from .views import UserRegistrationView, UserProfileView, JodiMatcherView, ChangePasswordView, InterestTagsView
 
 urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='user_registration'),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('profile/', UserProfileView.as_view(), name='user_profile'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('discovery/', JodiMatcherView.as_view(), name='jodi_discovery'),
+    path('interest-tags/', InterestTagsView.as_view(), name='interest_tags'),
 ]

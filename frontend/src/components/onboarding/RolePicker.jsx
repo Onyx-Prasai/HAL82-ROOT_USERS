@@ -1,17 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, Microscope, CheckCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 import api from '../../services/api';
+import TagSelector from '../common/TagSelector';
 
 const RolePicker = ({ onComplete }) => {
     const [step, setStep] = useState(1);
+    const [availableTags, setAvailableTags] = useState([]);
     const [selection, setSelection] = useState({
         role: 'FOUNDER',
         persona: 'HACKER',
         startup_stage: 'IDEA',
         nagarik_id: '',
         linkedin_profile: '',
+        interest_tags: [],
     });
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const response = await api.get('/users/interest-tags/');
+                setAvailableTags(response.data.tags);
+            } catch (error) {
+                console.error('Error fetching interest tags:', error);
+                // Fallback to default tags
+                setAvailableTags(['Agriculture', 'Tech', 'FinTech', 'Health', 'Education', 'Manufacturing', 'AI', 'Sustainability', 'General']);
+            }
+        };
+        fetchTags();
+    }, []);
 
     const roles = [
         { id: 'FOUNDER', title: 'Founder', desc: 'Building the next big thing', icon: <User size={32} /> },
@@ -29,6 +46,13 @@ const RolePicker = ({ onComplete }) => {
 
     const handleNext = () => setStep(step + 1);
     const handleBack = () => setStep(step - 1);
+
+    const canProceedFromTags = selection.interest_tags.length > 0;
+
+    let currentStep = step;
+    if (selection.role !== 'FOUNDER' && step === 2) {
+        currentStep = 3; // Skip persona step for non-founders
+    }
 
     const handleSubmit = async () => {
         try {
@@ -125,9 +149,79 @@ const RolePicker = ({ onComplete }) => {
                         </motion.div>
                     )}
 
-                    {(step === 3 || (step === 2 && selection.role !== 'FOUNDER')) && (
+                    {step === 3 && selection.role === 'FOUNDER' && (
                         <motion.div
-                            key="step3"
+                            key="step3-founder"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="flex flex-col gap-12"
+                        >
+                            <div className="text-center">
+                                <h1 className="text-5xl md:text-7xl font-black text-surface-text tracking-tight mb-4">Startup Stage</h1>
+                                <p className="text-xl text-surface-text-muted">Where is your startup at right now?</p>
+                            </div>
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-3 gap-4">
+                                    {stages.map((stage) => (
+                                        <button
+                                            key={stage}
+                                            onClick={() => setSelection({ ...selection, startup_stage: stage })}
+                                            className={`py-5 rounded-2xl border-2 font-black text-lg transition-all ${selection.startup_stage === stage
+                                                ? 'bg-sangam-emerald text-white border-sangam-emerald shadow-lg shadow-sangam-emerald/20'
+                                                : 'bg-surface-card text-surface-text-muted border-surface-border hover:border-surface-text-muted/30'
+                                                }`}
+                                        >
+                                            {stage}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="flex gap-6">
+                                <button onClick={handleBack} className="flex-1 border-2 border-surface-border py-5 px-8 rounded-2xl font-black text-xl text-surface-text-muted hover:bg-surface-card transition-all">Back</button>
+                                <button onClick={handleNext} className="flex-[2] bg-sangam-emerald text-white py-5 px-8 rounded-2xl font-black text-xl hover:bg-sangam-emerald-dark transition-all shadow-xl shadow-sangam-emerald/20">Continue</button>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {step === 4 || (step === 2 && selection.role !== 'FOUNDER') ? (
+                        <motion.div
+                            key="step-tags"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="flex flex-col gap-12"
+                        >
+                            <div className="text-center">
+                                <h1 className="text-5xl md:text-7xl font-black text-surface-text tracking-tight mb-4">Interest Tags</h1>
+                                <p className="text-xl text-surface-text-muted">What are your areas of interest? This helps us connect you with the right people.</p>
+                            </div>
+                            <TagSelector
+                                selectedTags={selection.interest_tags}
+                                onTagsChange={(tags) => setSelection({ ...selection, interest_tags: tags })}
+                                tags={availableTags}
+                                required={true}
+                            />
+                            <div className="flex gap-6">
+                                <button onClick={handleBack} className="flex-1 border-2 border-surface-border py-5 px-8 rounded-2xl font-black text-xl text-surface-text-muted hover:bg-surface-card transition-all">Back</button>
+                                <button
+                                    onClick={handleNext}
+                                    disabled={!canProceedFromTags}
+                                    className={`flex-[2] py-5 px-8 rounded-2xl font-black text-xl transition-all shadow-xl ${
+                                        canProceedFromTags
+                                            ? 'bg-sangam-emerald text-white hover:bg-sangam-emerald-dark shadow-sangam-emerald/20'
+                                            : 'bg-surface-border text-surface-text-muted cursor-not-allowed'
+                                    }`}
+                                >
+                                    Continue
+                                </button>
+                            </div>
+                        </motion.div>
+                    ) : null}
+
+                    {step === 5 || (step === 3 && selection.role !== 'FOUNDER') ? (
+                        <motion.div
+                            key="step-final"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
@@ -148,32 +242,13 @@ const RolePicker = ({ onComplete }) => {
                                         placeholder="ID or Profile Link"
                                     />
                                 </div>
-                                {selection.role === 'FOUNDER' && (
-                                    <div className="space-y-4">
-                                        <label className="block text-sm font-black text-surface-text-muted uppercase tracking-widest pl-2">Startup Stage</label>
-                                        <div className="grid grid-cols-3 gap-4">
-                                            {stages.map((stage) => (
-                                                <button
-                                                    key={stage}
-                                                    onClick={() => setSelection({ ...selection, startup_stage: stage })}
-                                                    className={`py-5 rounded-2xl border-2 font-black text-lg transition-all ${selection.startup_stage === stage
-                                                        ? 'bg-sangam-emerald text-white border-sangam-emerald shadow-lg shadow-sangam-emerald/20'
-                                                        : 'bg-surface-card text-surface-text-muted border-surface-border hover:border-surface-text-muted/30'
-                                                        }`}
-                                                >
-                                                    {stage}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                             <div className="flex gap-6">
                                 <button onClick={handleBack} className="flex-1 border-2 border-surface-border py-5 px-8 rounded-2xl font-black text-xl text-surface-text-muted hover:bg-surface-card transition-all">Back</button>
                                 <button onClick={handleSubmit} className="flex-[2] bg-sangam-emerald text-white py-5 px-8 rounded-2xl font-black text-xl hover:bg-sangam-emerald-dark transition-all shadow-xl shadow-sangam-emerald/20">Complete Onboarding</button>
                             </div>
                         </motion.div>
-                    )}
+                    ) : null}
                 </AnimatePresence>
             </div>
         </div>
