@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { TrendingUp, Users, Zap, Briefcase, Microscope, Info, Menu } from 'lucide-react';
 import logo from '../../assets/logo.png';
 import Sidebar from './Sidebar';
+import NotificationDropdown from './NotificationDropdown';
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -28,6 +29,8 @@ const Navbar = () => {
                 <NavButton to="/vision" icon={<Info size={18} />} label="Vision" />
 
                 <div className="w-[1px] h-6 bg-surface-border mx-1"></div>
+
+                <NotificationDropdown />
 
                 <button
                     onClick={() => setIsSidebarOpen(true)}

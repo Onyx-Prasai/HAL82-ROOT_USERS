@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
-from .serializers import UserSerializer
+from .serializers import UserSerializer, UserDiscoverySerializer
 from .models import INTEREST_TAGS
 
 User = get_user_model()
@@ -102,9 +102,37 @@ class ChangePasswordView(APIView):
         return Response({"message": "Password changed successfully"}, status=status.HTTP_200_OK)
 
 class JodiMatcherView(generics.ListAPIView):
-    serializer_class = UserSerializer
+    serializer_class = UserDiscoverySerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
+        from django.db.models import Q
         user = self.request.user
-        return User.objects.filter(role='FOUNDER').exclude(persona=user.persona).exclude(id=user.id)
+        qs = User.objects.filter(role='FOUNDER').exclude(id=user.id)
+        # Optional: exclude same persona for complementary matching
+        if user.persona and user.persona != 'NONE':
+            qs = qs.exclude(persona=user.persona)
+        # Filter by persona
+        persona = self.request.query_params.get('persona', None)
+        if persona:
+            qs = qs.filter(persona=persona)
+        # Filter by startup stage
+        stage = self.request.query_params.get('stage', None)
+        if stage:
+            qs = qs.filter(startup_stage=stage)
+        # Filter by province
+        province = self.request.query_params.get('province', None)
+        if province:
+            qs = qs.filter(province=province)
+        # Filter by interest tags (at least one match)
+        tags = self.request.query_params.get('tags', None)
+        if tags:
+            tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+            if tag_list:
+                filtered_ids = [u.id for u in qs if any(t in (u.interest_tags or []) for t in tag_list)]
+                qs = qs.filter(id__in=filtered_ids)
+        # Search by username or bio
+        search = self.request.query_params.get('search', None)
+        if search:
+            qs = qs.filter(Q(username__icontains=search) | Q(bio__icontains=search))
+        return qs

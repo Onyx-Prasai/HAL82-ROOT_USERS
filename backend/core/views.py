@@ -48,6 +48,25 @@ class SyndicateViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SyndicateSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
+    def get_queryset(self):
+        queryset = Syndicate.objects.filter(is_active=True)
+        # Filter by interest tags
+        tags = self.request.query_params.get('tags', None)
+        if tags:
+            tag_list = [t.strip() for t in tags.split(',') if t.strip()]
+            if tag_list:
+                filtered_ids = [s.id for s in queryset if any(t in (s.interest_tags or []) for t in tag_list)]
+                queryset = queryset.filter(id__in=filtered_ids)
+        # Search by title, description, founder
+        search = self.request.query_params.get('search', None)
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search) |
+                Q(founder__username__icontains=search)
+            )
+        return queryset
+
 class ExpertProfileViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ExpertProfileSerializer
     permission_classes = (permissions.IsAuthenticated,)

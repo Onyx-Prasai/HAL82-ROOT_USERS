@@ -2,13 +2,17 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
-from .models import Message  # You will need to create this model if it doesn't exist
+from .models import Message, Notification
 
 User = get_user_model()
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope["user"]
+        if not self.user or not self.user.is_authenticated:
+            await self.close()
+            return
         self.receiver_id = self.scope["url_route"]["kwargs"]["receiver_id"]
         self.room_name = f"chat_{min(self.user.id, self.receiver_id)}_{max(self.user.id, self.receiver_id)}"
         await self.channel_layer.group_add(
@@ -45,6 +49,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, sender_id, receiver_id, message):
-        # You must have a Message model with sender, receiver, content, timestamp fields
         msg = Message.objects.create(sender_id=sender_id, receiver_id=receiver_id, content=message)
+        Notification.objects.create(
+            user_id=receiver_id,
+            notification_type='MESSAGE',
+            title='New Message',
+            message=f"You received a message (see chat).",
+            payload={'sender_id': sender_id},
+        )
         return msg.timestamp.isoformat()
