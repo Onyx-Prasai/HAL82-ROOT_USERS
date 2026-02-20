@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sangam-slate: #1E293B;
+  --color-sangam-emerald: #10B981;
+  --font-sans: "Inter", "system-ui", "sans-serif";
+}
+
+@layer base {
+  body {
+    @apply bg-white text-sangam-slate antialiased;
+  }
+}
