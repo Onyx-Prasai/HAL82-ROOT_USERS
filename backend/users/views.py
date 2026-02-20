@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer
+from .models import INTEREST_TAGS
 
 User = get_user_model()
 
@@ -57,6 +58,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         
         # Call parent class to get tokens
         return super().post(request, *args, **kwargs)
+
+class InterestTagsView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        return Response({'tags': INTEREST_TAGS})
 
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()

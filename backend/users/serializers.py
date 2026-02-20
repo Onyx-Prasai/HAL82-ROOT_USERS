@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from .models import INTEREST_TAGS
 
 User = get_user_model()
 
@@ -8,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'persona', 'nagarik_id', 'linkedin_profile', 'startup_stage', 'karma_score', 'province', 'phone_number', 'bio', 'is_verified')
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'password', 'role', 'persona', 'nagarik_id', 'linkedin_profile', 'startup_stage', 'karma_score', 'province', 'phone_number', 'bio', 'is_verified', 'interest_tags')
         extra_kwargs = {
             'username': {'required': True, 'allow_blank': False},
             'email': {'required': True, 'allow_blank': False},
@@ -24,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
             'phone_number': {'required': False, 'allow_blank': True},
             'bio': {'required': False, 'allow_blank': True},
             'is_verified': {'read_only': True},
+            'interest_tags': {'required': False},
         }
 
     def validate_username(self, value):
@@ -42,10 +44,11 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
+        password = validated_data.pop('password', None)
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
-            password=validated_data['password'],
+            password=password,
             first_name=validated_data.get('first_name', ''),
             last_name=validated_data.get('last_name', ''),
             role=validated_data.get('role', 'FOUNDER'),
@@ -56,5 +59,6 @@ class UserSerializer(serializers.ModelSerializer):
             province=validated_data.get('province', 'NONE'),
             phone_number=validated_data.get('phone_number', ''),
             bio=validated_data.get('bio', ''),
+            interest_tags=validated_data.get('interest_tags', []),
         )
         return user

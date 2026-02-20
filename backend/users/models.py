@@ -1,6 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+# Predefined Interest Tags
+INTEREST_TAGS = [
+    'Agriculture',
+    'Tech',
+    'FinTech',
+    'Health',
+    'Education',
+    'Manufacturing',
+    'AI',
+    'Sustainability',
+    'General',
+]
+
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
         ('FOUNDER', 'Founder'),
@@ -40,6 +53,7 @@ class CustomUser(AbstractUser):
     karma_score = models.IntegerField(default=0)
     bio = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    interest_tags = models.JSONField(default=list, blank=True)
 
     def __str__(self):
         return f"{self.username} ({self.role})"

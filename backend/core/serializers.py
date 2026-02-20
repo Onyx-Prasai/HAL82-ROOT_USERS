@@ -29,7 +29,8 @@ class SyndicateSerializer(serializers.ModelSerializer):
 class ExpertProfileSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
+    interest_tags = serializers.ReadOnlyField(source='user.interest_tags')
 
     class Meta:
         model = ExpertProfile
-        fields = ('id', 'username', 'email', 'specialization', 'bio', 'hourly_rate', 'rating', 'is_vetted')
+        fields = ('id', 'username', 'email', 'specialization', 'bio', 'hourly_rate', 'rating', 'is_vetted', 'interest_tags')
