@@ -45,3 +45,52 @@ class ExpertProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.specialization}"
+
+
+class FounderProfile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='founder_profile')
+    company_name = models.CharField(max_length=200, blank=True, null=True)
+    founded_date = models.DateField(blank=True, null=True)
+    team_size = models.IntegerField(default=1)
+    traction = models.TextField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Founder @ {self.company_name or 'N/A'}"
+
+
+class InvestorProfile(models.Model):
+    INVESTMENT_STAGE = (
+        ('PRESEED', 'Pre-seed'),
+        ('SEED', 'Seed'),
+        ('SERIES_A', 'Series A'),
+        ('LATE', 'Late Stage'),
+        ('ANGEL', 'Angel'),
+    )
+
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='investor_profile')
+    firm_name = models.CharField(max_length=200, blank=True, null=True)
+    investment_stage = models.CharField(max_length=20, choices=INVESTMENT_STAGE, default='SEED')
+    available_capital = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    focus_areas = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Investor @ {self.firm_name or 'Independent'}"
+
+
+class Points(models.Model):
+    """A simple points system that can be attached to users.
+
+    This keeps the domain small so contributors can add records and
+    connect them to users (for leaderboards, rewards, etc.).
+    """
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='points')
+    points = models.IntegerField(default=0)
+    reason = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username}: {self.points} ({self.reason})"
