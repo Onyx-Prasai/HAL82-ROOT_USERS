@@ -42,19 +42,25 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data.get('email', ''),
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', ''),
-            role=validated_data.get('role', 'FOUNDER'),
-            persona=validated_data.get('persona', 'NONE'),
-            nagarik_id=validated_data.get('nagarik_id', ''),
-            linkedin_profile=validated_data.get('linkedin_profile', None),
-            startup_stage=validated_data.get('startup_stage', 'NONE'),
-            province=validated_data.get('province', 'NONE'),
-            phone_number=validated_data.get('phone_number', ''),
-            bio=validated_data.get('bio', ''),
-        )
-        return user
+        # Use create_user which handles password hashing. Catch DB integrity errors
+        # and re-raise as serializers.ValidationError for better client feedback.
+        from django.db import IntegrityError
+        try:
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=validated_data.get('email', ''),
+                password=validated_data['password'],
+                first_name=validated_data.get('first_name', ''),
+                last_name=validated_data.get('last_name', ''),
+                role=validated_data.get('role', 'FOUNDER'),
+                persona=validated_data.get('persona', 'NONE'),
+                nagarik_id=validated_data.get('nagarik_id', ''),
+                linkedin_profile=validated_data.get('linkedin_profile', None),
+                startup_stage=validated_data.get('startup_stage', 'NONE'),
+                province=validated_data.get('province', 'NONE'),
+                phone_number=validated_data.get('phone_number', ''),
+                bio=validated_data.get('bio', ''),
+            )
+            return user
+        except IntegrityError as e:
+            raise serializers.ValidationError({"non_field_errors": [str(e)]})

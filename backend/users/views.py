@@ -6,6 +6,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer
+from rest_framework.exceptions import ValidationError as DRFValidationError
 
 User = get_user_model()
 
@@ -65,12 +66,22 @@ class UserRegistrationView(generics.CreateAPIView):
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except DRFValidationError as exc:
+            # Return validation errors as 400 so frontend can display them
+            return Response(exc.detail, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as exc:
+            # Return a controlled JSON error instead of a 500 HTML response
+            import traceback
+            traceback.print_exc()
+            return Response(
+                {"detail": "Registration failed due to server error.", "error": str(exc)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
