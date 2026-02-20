@@ -41,7 +41,7 @@ function AppContent() {
           <Route path="/marketplace" element={isAuthenticated ? <ExpertMarketplace /> : <Navigate to="/login" />} />
           <Route path="/security" element={isAuthenticated ? <SecurityPage /> : <Navigate to="/login" />} />
           <Route path="/vision" element={<VisionPage />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
         </Routes>
       </div>
     </>
