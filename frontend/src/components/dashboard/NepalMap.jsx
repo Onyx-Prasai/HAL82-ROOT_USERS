@@ -21,9 +21,9 @@ const NepalMap = ({ hotspots = [] }) => {
             </div>
 
             <svg viewBox="0 0 450 300" className="w-full h-full max-w-lg drop-shadow-2xl">
-                {Array.isArray(hotspots) && provinces.map((p) => {
-                    const stats = hotspots.find(h => h.province === p.id);
-                    const opacity = stats ? Math.min(0.2 + (stats.activity / 50), 1) : 0.2;
+                {provinces.map((p) => {
+                    const stats = Array.isArray(hotspots) ? hotspots.find(h => h.province === p.id) : null;
+                    const opacity = stats ? Math.min(0.2 + (stats.activity / 50), 1) : 1;
 
                     return (
                         <motion.path
